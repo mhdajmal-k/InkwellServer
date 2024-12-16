@@ -1,13 +1,14 @@
 // import { Types } from "mongoose";
 
-import { IUser } from "../../frameWork/type/IuserSignUpResult";
+import { IUser, IUserProfile } from "../../frameWork/type/IuserSignUpResult";
 
 interface iUserRepository {
   userAlreadyExist(email: string): Promise<boolean>;
   createUser(data: IUser): Promise<IUser>;
-  //   createUserFromGoogle(data: object): Promise<any>;
-  //   validUser(email: string): Promise<any>;
-  //   getId(id: string): Promise<Types.ObjectId | null | any>;
+  validUser(email: string): Promise<IUser>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getId(id: string | undefined): Promise<any>;
+  getIdAndUpdate(id: string | undefined, data: IUserProfile): Promise<IUser>;
 }
 
 export default iUserRepository;

@@ -16,7 +16,10 @@ export const errorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
+  console.log(err, "in the middileeare");
   if (err instanceof CustomError) {
+    console.log("in the error in custom");
+    console.log(err.message);
     res.status(err.statusCode).json({
       success: false,
       message: err.message,

@@ -16,9 +16,13 @@ class JwtToken implements iJwtService {
 
   verifyToken(token: string): { id: string } | null {
     try {
+      console.log(token, "is the token in the fn");
+      console.log(this.jwtSecret, "is the jwt secret");
+
       const decodedToken = jwt.verify(token, this.jwtSecret) as {
         id: string;
       };
+      console.log(decodedToken, "in the function decoded");
       return decodedToken;
     } catch (error) {
       console.error("Invalid or expired token", error);

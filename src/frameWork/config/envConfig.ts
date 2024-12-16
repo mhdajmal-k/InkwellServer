@@ -7,4 +7,7 @@ export const config = {
   JWT_REFRESH_SECRET:
     process.env.JWT_REFRESH_SECRET || "your_jwtJWT_REFRESH_SECRET",
   CORS_ORIGIN: process.env.CORS_ORIGIN,
+  CLOUD_NAME: process.env.CLOUD_NAME,
+  CLOUD_APIKEYS: process.env.CLOUD_APIKEYS,
+  CLOUD_PASSWORD: process.env.CLOUD_PASSWORD,
 };

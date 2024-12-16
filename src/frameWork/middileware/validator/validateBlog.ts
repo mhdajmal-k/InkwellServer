@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { signUpValidatorSchema } from "../../helpers/validatorSchema/signupvalidator";
 import { HttpStatusCode } from "../../helpers/Enums";
+import { blogValidatorSchema } from "../../helpers/validatorSchema/blogvalidator";
 
-export const validateSignUp = (
+export const validateBlog = (
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
-  const { error } = signUpValidatorSchema.validate(req.body);
+  const { error } = blogValidatorSchema.validate(req.body);
+
   const particularError = error?.details
     .map((detail) => detail.message.replace(/"/g, ""))
     .filter((message) => message);

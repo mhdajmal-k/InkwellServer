@@ -3,8 +3,9 @@ import { IUser } from "../type/userSchemaType";
 
 const userSchema = new Schema<IUser>(
   {
-    userName: {
+    firstName: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
@@ -22,6 +23,20 @@ const userSchema = new Schema<IUser>(
     block: {
       type: Boolean,
       default: false,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    dob: {
+      type: Date,
+    },
+    phone: {
+      type: String,
+    },
+    articlePreferences: {
+      type: [String],
+      required: true,
     },
   },
   { timestamps: true }

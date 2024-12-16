@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(helmet());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());

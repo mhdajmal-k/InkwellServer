@@ -1,9 +1,13 @@
 import { Application } from "express";
 import { userRouter } from "./authRoute";
-import { blogRouter } from "./blogRoute";
+import multer from "multer";
+import blogRouter from "./blogRoute";
+
+const storage = multer.memoryStorage();
+export const upload = multer({ storage: storage });
 
 const routes = (app: Application) => {
-  app.use("/api/user", userRouter);
-  app.use("/api/blog", blogRouter);
+  app.use("/api/user/", userRouter);
+  app.use("/api/blog/", blogRouter);
 };
 export default routes;
