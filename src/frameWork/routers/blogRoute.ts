@@ -37,7 +37,12 @@ blogRouter.get(
 );
 blogRouter.put(
   "/edit/:blogId",
-  upload.single("image"),
+  (req, res, next) => {
+    if (!req.headers["content-type"]?.includes("multipart/form-data")) {
+      return next();
+    }
+    upload.single("image")(req, res, next);
+  },
   validateBlog,
   authorization(),
   blogController.updateBlog.bind(blogController)

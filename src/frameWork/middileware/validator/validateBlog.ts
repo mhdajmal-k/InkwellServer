@@ -7,6 +7,8 @@ export const validateBlog = (
   res: Response,
   next: NextFunction
 ): void => {
+  console.log("in here");
+  console.log(req.body);
   const { error } = blogValidatorSchema.validate(req.body);
 
   const particularError = error?.details

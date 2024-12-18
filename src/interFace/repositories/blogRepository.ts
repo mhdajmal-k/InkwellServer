@@ -83,7 +83,7 @@ class BlogRepository implements IBlogRepository {
   }
   async getAllUserBlogs(id: string): Promise<IBlog[]> {
     try {
-      const blogs = await Blog.find({ author: id });
+      const blogs = await Blog.find({ author: id, publish: true });
       return blogs as IBlog[];
     } catch (error) {
       if (error instanceof Error) {
@@ -99,7 +99,7 @@ class BlogRepository implements IBlogRepository {
   async getOneBlog(id: string): Promise<IBlogOne | null> {
     try {
       console.log(id, "is the id from the repo");
-      const blog = await Blog.findById(id).populate(
+      const blog = await Blog.findById({ _id: id, publish: true }).populate(
         "author",
         "firstName lastName"
       );
@@ -193,7 +193,7 @@ class BlogRepository implements IBlogRepository {
   }
   async findBlogById(blogId: string): Promise<IBlog | null> {
     try {
-      return await Blog.findById(blogId);
+      return await Blog.findById({ _id: blogId, publish: true });
     } catch (error) {
       if (error instanceof Error) {
         throw new CustomError(
@@ -241,11 +241,13 @@ class BlogRepository implements IBlogRepository {
   }
   async deleteBlogs(id: string): Promise<boolean> {
     try {
+      console.log("called in delete Blog");
       const deleteBlog = await Blog.findByIdAndUpdate(
         id,
         { publish: false },
         { new: true }
       );
+
       return !!deleteBlog;
     } catch (error) {
       if (error instanceof Error) {

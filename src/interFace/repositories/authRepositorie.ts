@@ -55,7 +55,6 @@ class AuthRepository implements iUserRepository {
       const user = await User.findById({ _id: id }).lean();
       return user as IUser;
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         throw new CustomError(
           error.message || "An unexpected error occurred",
@@ -71,15 +70,12 @@ class AuthRepository implements iUserRepository {
     data: IUserProfile
   ): Promise<IUser> {
     try {
-      console.log(data, "is user DAta");
       const user = await User.findByIdAndUpdate(id, data, {
         new: true,
         runValidators: true,
       }).lean();
-      console.log(user, "is the updated");
       return user as IUser;
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         throw new CustomError(
           error.message || "An unexpected error occurred",

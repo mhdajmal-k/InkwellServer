@@ -24,7 +24,6 @@ class BlogInteractor implements IBlogInteractor {
     result: IBlog;
   }> {
     try {
-      console.log("in here called");
       const createBlog = await this.Repository.createBlog(
         author,
         content,
@@ -59,8 +58,6 @@ class BlogInteractor implements IBlogInteractor {
     try {
       const preference = await this.Repository.getBlogPreference(userId);
       const preferredBlogs = await this.Repository.getAllBlogs(preference);
-      console.log(preference, "is the preference");
-      console.log(preferredBlogs, "is the preference");
       return {
         status: true,
         statusCode: HttpStatusCode.OK,
@@ -90,7 +87,6 @@ class BlogInteractor implements IBlogInteractor {
     try {
       const Blogs = await this.Repository.getAllUserBlogs(String(userId));
 
-      console.log(Blogs, "is the preference");
       return {
         status: true,
         statusCode: HttpStatusCode.OK,
@@ -248,6 +244,7 @@ class BlogInteractor implements IBlogInteractor {
     result: "";
   }> {
     try {
+      console.log("called in int useCases");
       const deleteBlog = await this.Repository.deleteBlogs(blogId);
       if (!deleteBlog) {
         return {
@@ -257,6 +254,7 @@ class BlogInteractor implements IBlogInteractor {
           result: "",
         };
       }
+      console.log(deleteBlog, "is expecting the deleted Blog");
       return {
         status: true,
         statusCode: HttpStatusCode.OK,

@@ -10,7 +10,6 @@ class AuthController {
   constructor(private AuthInteractor: IUserAuthInteractor) {}
   async signUp(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log(req.body);
       const userDat = req.body;
       const response = await this.AuthInteractor.userSingUp(userDat);
       if (response.status) {
@@ -60,7 +59,6 @@ class AuthController {
         });
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -125,7 +123,6 @@ class AuthController {
         result: {},
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

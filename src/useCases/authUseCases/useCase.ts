@@ -39,7 +39,6 @@ class UserAuthInteractor implements IUserAuthInteractor {
           HttpStatusCode.Forbidden
         );
       }
-      console.log(creatingNewUser.id, "is the fucking id");
       const jwtToken = this.jwt.generateToken(creatingNewUser.id);
       const jwtRefreshToken = this.jwt.generateRefreshToken(creatingNewUser.id);
       return {
@@ -87,7 +86,6 @@ class UserAuthInteractor implements IUserAuthInteractor {
           HttpStatusCode.Forbidden
         );
       }
-      console.log(validUser._id, "is the fucking Id");
       const jwtAccessToken = this.jwt.generateToken(String(validUser._id));
       const jwtRefreshToken = this.jwt.generateRefreshToken(
         String(validUser.id)
@@ -122,7 +120,6 @@ class UserAuthInteractor implements IUserAuthInteractor {
   }> {
     try {
       const userData = await this.Repository.getId(id);
-      console.log(userData);
       const { password, ...withOutUserData } = userData;
       return {
         statusCode: HttpStatusCode.OK,
@@ -152,7 +149,6 @@ class UserAuthInteractor implements IUserAuthInteractor {
   }> {
     try {
       const userData = await this.Repository.getIdAndUpdate(id, user);
-      console.log(userData);
       const { password, ...withOutUserData } = userData;
       return {
         statusCode: HttpStatusCode.OK,

@@ -68,7 +68,6 @@ class BlogController {
     next: NextFunction
   ): Promise<void> {
     try {
-      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
       const userId = req.user?.id;
       const response = await this.iBlogInteractor.getUserBlogs(userId);
       res.status(response.statusCode).json({
@@ -207,8 +206,9 @@ class BlogController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
-      const response = await this.iBlogInteractor.deleteBlog(id);
+      const { blogId } = req.params;
+      console.log("called");
+      const response = await this.iBlogInteractor.deleteBlog(blogId);
       if (response.status) {
         res.status(response.statusCode).json({
           status: response.status,
