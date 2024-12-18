@@ -9,6 +9,7 @@ export const authorization =
   () =>
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const userToken = req.cookies.User_AccessToken;
+    console.log(userToken, "is the user Token");
     const jwt = new JwtToken(config.JWT_SECRET, config.JWT_REFRESH_SECRET);
     let decodeToken;
 
