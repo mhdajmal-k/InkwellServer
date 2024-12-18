@@ -43,12 +43,12 @@ class AuthController {
       if (response.status) {
         const data = response.result as IUserResult;
         res.cookie("User_AccessToken", data.tokenJwt, {
-          httpOnly: true,
+          // httpOnly: true,
           sameSite: "none",
           maxAge: 20 * 60 * 1000,
         });
         res.cookie("User_RefreshToken", data.jwtRefreshToken, {
-          httpOnly: true,
+          // httpOnly: true,
           sameSite: "none",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
