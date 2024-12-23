@@ -37,6 +37,10 @@ userRouter.put(
   authController.updateProfileData.bind(authController)
 );
 userRouter.post(
+  "/refreshToken",
+  authController.checkRefreshToken.bind(authController)
+);
+userRouter.post(
   "/logout",
   apiLimiter,
   authController.logout.bind(authController)

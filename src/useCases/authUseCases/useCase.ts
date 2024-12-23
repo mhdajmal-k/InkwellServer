@@ -138,6 +138,53 @@ class UserAuthInteractor implements IUserAuthInteractor {
       }
     }
   }
+  async checkRefreshToken(token: string): Promise<{
+    status: boolean;
+    message: string;
+    result: string | null;
+    statusCode: number;
+  }> {
+    try {
+      const verifyRefreshToken = this.jwt.VerifyTokenRefresh(token);
+      console.log(verifyRefreshToken, "is the verify Token ");
+      const existUser = await this.Repository.getId(verifyRefreshToken?.id);
+      console.log(existUser, "is the existing User");
+      if (!existUser) {
+        return {
+          statusCode: 404,
+          status: false,
+          message: "Authorization denied. User does not exist.",
+          result: null,
+        };
+      }
+
+      if (existUser.block) {
+        return {
+          statusCode: 401,
+          status: false,
+          message: "OOPS YOU HAVE BEEN BLOCKED BY ADMIN",
+          result: null,
+        };
+      }
+
+      const newJwtAccessToken = this.jwt.generateToken(existUser._id);
+      return {
+        statusCode: 201,
+        status: true,
+        message: "Access token refreshed successfully.",
+        result: newJwtAccessToken,
+      };
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw new CustomError(
+          error.message,
+          HttpStatusCode.InternalServerError
+        );
+      } else {
+        throw error;
+      }
+    }
+  }
   async updateProfileData(
     id: string,
     user: IUserProfile

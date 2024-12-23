@@ -70,6 +70,7 @@ class AuthRepository implements iUserRepository {
     data: IUserProfile
   ): Promise<IUser> {
     try {
+      console.log(data, "in the final repo");
       const user = await User.findByIdAndUpdate(id, data, {
         new: true,
         runValidators: true,

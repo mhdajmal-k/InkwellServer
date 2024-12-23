@@ -23,6 +23,14 @@ interface IUserAuthInteractor {
     message: string;
     result: object;
   }>;
+  checkRefreshToken(
+    token: string
+  ): Promise<{
+    status: boolean;
+    message: string;
+    result: string | null;
+    statusCode: number;
+  }>;
   updateProfileData(
     id: string,
     user: IUserProfile
