@@ -49,23 +49,34 @@ class BlogInteractor implements IBlogInteractor {
     }
   }
 
-  async getBlogs(userId: string): Promise<{
+  async getBlogs(
+    userId: string,
+    page: number,
+    limit: number
+  ): Promise<{
     statusCode: number;
     status: boolean;
     message: string;
     result: { blogs: IProfferedBlog[]; preferences: string[] };
+    hasMore: boolean;
   }> {
     try {
       const preference = await this.Repository.getBlogPreference(userId);
-      const preferredBlogs = await this.Repository.getAllBlogs(preference);
+      const skip = (page - 1) * limit;
+      const [blogs, totalCount] = await Promise.all([
+        this.Repository.getAllBlogs(preference, skip, limit),
+        this.Repository.getBlogsCount(preference),
+      ]);
+      const hasMore = totalCount > skip + blogs.length;
       return {
         status: true,
         statusCode: HttpStatusCode.OK,
         message: "",
         result: {
-          blogs: preferredBlogs,
+          blogs,
           preferences: preference,
         },
+        hasMore,
       };
     } catch (error) {
       if (error instanceof CustomError) {

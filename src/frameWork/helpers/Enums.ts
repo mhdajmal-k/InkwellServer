@@ -1,4 +1,4 @@
-export enum MessageError {
+export enum Messages {
   UserAlreadyExists = "User already exists",
   UserLogOut = "Logout successful",
   FiledToCarteNewUser = "Filed To Carte NewUser",
@@ -6,6 +6,10 @@ export enum MessageError {
   Block = "oops you have been blocked By Admin",
   IncorrectPassword = "Incorrect Password",
   AuthenticatedError = "Authorization denied. Invalid token",
+  ProfileUpdate = "Profile updated SuccessFully",
+  CreatedAccess = "Access token refreshed successfully.",
+  MissingRefresh = "Bad Parameters - Refresh token missing.",
+  UserNotFound = "Authorization denied. User does not exist.",
 }
 
 export enum HttpStatusCode {

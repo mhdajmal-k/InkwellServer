@@ -13,7 +13,12 @@ interface IBlogRepository {
     imageUrl: string
   ): Promise<IBlog>;
 
-  getAllBlogs(preference: string[]): Promise<IProfferedBlog[]>;
+  getAllBlogs(
+    preference: string[],
+    skip?: number,
+    limit?: number
+  ): Promise<IProfferedBlog[]>;
+  getBlogsCount(preference: string[]): Promise<number>;
   deleteBlogs(id: string): Promise<boolean>;
   getAllUserBlogs(id: string): Promise<IBlog[]>;
   getOneBlog(id: string): Promise<IBlogOne | null>;

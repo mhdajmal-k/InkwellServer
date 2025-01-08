@@ -4,7 +4,7 @@ import IUserResult, {
   AuthenticatedRequest,
   IUser,
 } from "../../frameWork/type/IuserSignUpResult";
-import { HttpStatusCode, MessageError } from "../../frameWork/helpers/Enums";
+import { HttpStatusCode, Messages } from "../../frameWork/helpers/Enums";
 
 class AuthController {
   constructor(private AuthInteractor: IUserAuthInteractor) {}
@@ -12,6 +12,7 @@ class AuthController {
     try {
       const userDat = req.body;
       const response = await this.AuthInteractor.userSingUp(userDat);
+      console.log(response, "is the response");
       if (response.status) {
         const data = response.result as IUserResult;
         res.cookie("User_AccessToken", data.tokenJwt, {
@@ -39,11 +40,10 @@ class AuthController {
   }
   async singIN(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log("in here called");
       const userDat = req.body;
       const response = await this.AuthInteractor.userLogin(userDat);
+
       if (response.status) {
-        console.log("In here called in signin");
         const data = response.result as IUserResult;
 
         res.cookie("User_AccessToken", data.tokenJwt, {
@@ -66,7 +66,6 @@ class AuthController {
         });
       }
     } catch (error) {
-      console.log(error, "in signin ");
       next(error);
     }
   }
@@ -76,13 +75,11 @@ class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
-      console.log("called");
       const userId = req.user?.id;
 
       const response = await this.AuthInteractor.userProfileData(userId);
       if (response.status) {
         const data = response.result as IUser;
-        console.log(response, "is the final response");
         res.status(response.statusCode).json({
           status: response.status,
           message: response.message,
@@ -128,11 +125,12 @@ class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<any> {
     try {
+      console.log("in refersh token ddddddddddddddddd");
       const refreshToken = req.cookies.User_RefreshToken;
       if (!refreshToken) {
         return res.status(HttpStatusCode.Unauthorized).json({
           status: false,
-          message: "Bad Parameters - Refresh token missing.",
+          message: Messages.MissingRefresh,
           result: {},
         });
       }
@@ -149,7 +147,7 @@ class AuthController {
         });
         return res.status(HttpStatusCode.OK).json({
           status: true,
-          message: "Access token refreshed successfully.",
+          message: Messages.CreatedAccess,
           result: {},
         });
       } else {
@@ -169,7 +167,7 @@ class AuthController {
       res.clearCookie("User_RefreshToken");
       res.status(HttpStatusCode.OK).json({
         status: true,
-        message: MessageError.UserLogOut,
+        message: Messages.UserLogOut,
         result: {},
       });
     } catch (error) {

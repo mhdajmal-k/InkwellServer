@@ -2,7 +2,7 @@
 import iUserRepository from "../../entities/Irepositories/IauthRepository";
 import { iJwtService } from "../../entities/Iservice/Ijwtservice";
 import IUserAuthInteractor from "../../entities/IuseCase/IAuthUser";
-import { HttpStatusCode, MessageError } from "../../frameWork/helpers/Enums";
+import { HttpStatusCode, Messages } from "../../frameWork/helpers/Enums";
 import { comparePassword } from "../../frameWork/helpers/passwordHelpers";
 import { CustomError } from "../../frameWork/middileware/errorHandiler";
 import IUserResult, {
@@ -28,14 +28,14 @@ class UserAuthInteractor implements IUserAuthInteractor {
       );
       if (userAlreadyExist) {
         throw new CustomError(
-          MessageError.UserAlreadyExists,
+          Messages.UserAlreadyExists,
           HttpStatusCode.Forbidden
         );
       }
       const creatingNewUser = await this.Repository.createUser(user);
       if (!creatingNewUser) {
         throw new CustomError(
-          MessageError.FiledToCarteNewUser,
+          Messages.FiledToCarteNewUser,
           HttpStatusCode.Forbidden
         );
       }
@@ -71,24 +71,21 @@ class UserAuthInteractor implements IUserAuthInteractor {
     try {
       const validUser = await this.Repository.validUser(user.email);
       if (!validUser) {
-        throw new CustomError(
-          MessageError.InvalidEmail,
-          HttpStatusCode.Forbidden
-        );
+        throw new CustomError(Messages.InvalidEmail, HttpStatusCode.Forbidden);
       }
       if (validUser.block) {
-        throw new CustomError(MessageError.Block, HttpStatusCode.Unauthorized);
+        throw new CustomError(Messages.Block, HttpStatusCode.Unauthorized);
       }
       const validPassword = comparePassword(user.password, validUser.password);
       if (!validPassword) {
         throw new CustomError(
-          MessageError.IncorrectPassword,
+          Messages.IncorrectPassword,
           HttpStatusCode.Forbidden
         );
       }
       const jwtAccessToken = this.jwt.generateToken(String(validUser._id));
       const jwtRefreshToken = this.jwt.generateRefreshToken(
-        String(validUser.id)
+        String(validUser._id)
       );
       return {
         status: true,
@@ -146,14 +143,12 @@ class UserAuthInteractor implements IUserAuthInteractor {
   }> {
     try {
       const verifyRefreshToken = this.jwt.VerifyTokenRefresh(token);
-      console.log(verifyRefreshToken, "is the verify Token ");
       const existUser = await this.Repository.getId(verifyRefreshToken?.id);
-      console.log(existUser, "is the existing User");
       if (!existUser) {
         return {
           statusCode: 404,
           status: false,
-          message: "Authorization denied. User does not exist.",
+          message: Messages.UserNotFound,
           result: null,
         };
       }
@@ -162,7 +157,7 @@ class UserAuthInteractor implements IUserAuthInteractor {
         return {
           statusCode: 401,
           status: false,
-          message: "OOPS YOU HAVE BEEN BLOCKED BY ADMIN",
+          message: Messages.Block,
           result: null,
         };
       }
@@ -200,7 +195,7 @@ class UserAuthInteractor implements IUserAuthInteractor {
       return {
         statusCode: HttpStatusCode.OK,
         status: true,
-        message: "Profile updated SuccessFully",
+        message: Messages.ProfileUpdate,
         result: withOutUserData,
       };
     } catch (error) {

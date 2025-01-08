@@ -41,7 +41,11 @@ class BlogRepository implements IBlogRepository {
       }
     }
   }
-  async getAllBlogs(preference: string[]): Promise<IProfferedBlog[]> {
+  async getAllBlogs(
+    preference: string[],
+    skip = 0,
+    limit = 10
+  ): Promise<IProfferedBlog[]> {
     try {
       const query: any = { publish: true };
       if (preference.length > 0) {
@@ -49,9 +53,30 @@ class BlogRepository implements IBlogRepository {
       }
       const blogs = await Blog.find(query)
         .populate("author", "firstName lastName")
+        .skip(skip)
+        .limit(limit)
         .lean();
-      console.log(blogs, "in the repo");
       return blogs as unknown as IProfferedBlog[];
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new CustomError(
+          error.message || "An unexpected error occurred",
+          HttpStatusCode.InternalServerError
+        );
+      } else {
+        throw error;
+      }
+    }
+  }
+  async getBlogsCount(preference: string[]): Promise<number> {
+    try {
+      const query: any = { publish: true };
+      if (preference.length > 0) {
+        query.category = { $in: preference };
+      }
+
+      const count = await Blog.countDocuments(query);
+      return count;
     } catch (error) {
       if (error instanceof Error) {
         throw new CustomError(

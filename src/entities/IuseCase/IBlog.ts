@@ -17,7 +17,11 @@ interface IBlogInteractor {
     message: string;
     result: IBlog;
   }>;
-  getBlogs(userId?: string): Promise<{
+  getBlogs(
+    userId?: string,
+    page?: number,
+    limit?: number
+  ): Promise<{
     statusCode: number;
     status: boolean;
     message: string;
@@ -25,6 +29,7 @@ interface IBlogInteractor {
       blogs: IProfferedBlog[];
       preferences: string[];
     };
+    hasMore: boolean;
   }>;
   getUserBlogs(userId?: string): Promise<{
     statusCode: number;

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Response } from "express";
 import { AuthenticatedRequest } from "../type/IuserSignUpResult";
 import JwtToken from "../services/jwt";
 import { config } from "../config/envConfig";
-import { HttpStatusCode, MessageError } from "../helpers/Enums";
+import { HttpStatusCode, Messages } from "../helpers/Enums";
 import AuthRepository from "../../interFace/repositories/authRepositorie";
 
 export const authorization =
@@ -19,7 +20,7 @@ export const authorization =
 
       if (!decodeToken) {
         return res.status(HttpStatusCode.Unauthorized).json({
-          message: MessageError.AuthenticatedError,
+          message: Messages.AuthenticatedError,
           result: {},
           status: false,
         });
@@ -30,9 +31,7 @@ export const authorization =
         const existUser = await userRepository.getId(decodeToken.id);
         if (!existUser || existUser.block) {
           return res.status(HttpStatusCode.Unauthorized).json({
-            message: !existUser
-              ? "Authorization denied. User does not exist."
-              : "OOPS YOU HAVE BEEN BLOCKED BY ADMIN",
+            message: !existUser ? Messages.UserNotFound : Messages.Block,
             result: {},
             status: false,
           });
@@ -41,10 +40,9 @@ export const authorization =
 
       req.user = { id: decodeToken.id };
       next();
-    } catch (error) {
-      console.error("Authorization Error:", error);
+    } catch (error: any) {
       return res.status(HttpStatusCode.InternalServerError).json({
-        message: "Authorization failed due to server error.",
+        message: error.message,
         result: {},
         status: false,
       });

@@ -52,11 +52,15 @@ class BlogController {
   ): Promise<void> {
     try {
       const userId = req.user?.id;
-      const response = await this.iBlogInteractor.getBlogs(userId);
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const response = await this.iBlogInteractor.getBlogs(userId, page, limit);
+      console.log(response, "is the jffffffffffffffffff");
       res.status(response.statusCode).json({
         status: response.status,
         message: response.message,
         result: response.result,
+        hasMore: response.hasMore,
       });
     } catch (error) {
       next(error);
@@ -68,6 +72,7 @@ class BlogController {
     next: NextFunction
   ): Promise<void> {
     try {
+      console.log(req.body, "is the body");
       const userId = req.user?.id;
       const response = await this.iBlogInteractor.getUserBlogs(userId);
       res.status(response.statusCode).json({
